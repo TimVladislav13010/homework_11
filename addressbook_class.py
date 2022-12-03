@@ -48,7 +48,7 @@ class Record:
             self.phones.append(Phone(new_phone))
 
         if len(self.phones) == 1:
-            self.phones[0].change_value(new_phone)
+            self.phones[0].value = new_phone
 
         if len(self.phones) > 1:
             i = -1
@@ -84,7 +84,7 @@ class Record:
                 i += 1
                 print(f"№  {i}  :  {phone.value}")
             inp_user = int(input(f"Введіть №..."))
-            number = self.phones[inp_user].return_value()
+            number = self.phones[inp_user].value
             self.phones.pop(inp_user)
             return f"{number}"
 
@@ -110,18 +110,24 @@ class Field:
     Батьківський клас для Name, Phone.
     """
     def __init__(self, value):
-        self.value = value
+        self.__value = value
 
-    def change_value(self, new_value):
+    @property
+    def value(self):
         """
-        Метод для зміни значення value.
+        Гетер для повернення значення value.
+        :return:
+        """
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        """
+        Сетер для зміни значення value.
         :param new_value:
         :return:
         """
-        self.value = new_value
-
-    def return_value(self):
-        return self.value
+        self.__value = new_value
 
 
 class Name(Field):
