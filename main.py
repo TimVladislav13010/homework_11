@@ -28,7 +28,7 @@ def input_error(func):
         except IndexError:
             return f"Wrong index"
         except ValueError:
-            return f"ValueError"
+            return f"ValueError: Wrong enter."
 
     return wrapper
 
@@ -77,9 +77,7 @@ def create_data(data):
 
     if name.isnumeric():
         raise ValueError('Wrong name.')
-    # for phon in phones:
-    #     if (not phon.isnumeric()) or (phon in "+"):
-    #         raise ValueError('Wrong phones.')
+
     return name.title(), phones
 
 
@@ -90,11 +88,10 @@ def change(data):
     """
     name, number = data.strip().split(' ')
     name = name.title()
+
     if name not in PHONE_BOOK:
         return f"{name} імя не знайдено в словнику"
 
-    # elif not number.isdigit():
-    #     return f"{number} не номер телефону будь ласка введіть числа"
     records = PHONE_BOOK[name]
     records.change_phone_record(number)
     return f"Запис ({name} : {number}) замінено в словнику"
@@ -126,9 +123,6 @@ def user_add_birthday(data):
     if name not in PHONE_BOOK:
         return f"{name} імя не знайдено в словнику"
 
-    elif not re.fullmatch(r"\d{2}\.\d{2}\.\d{4}", birthday):
-        return f"{birthday} не дата в форматі (00.00.0000/д.м.р)."
-
     record = PHONE_BOOK[name]
     record.change_birthday_record(birthday)
     return f"Дата народження ({birthday}) додано до контакту {name}"
@@ -141,11 +135,10 @@ def user_add_phone(data):
     """
     name, number = data.strip().split(' ')
     name = name.title()
+
     if name not in PHONE_BOOK:
         return f"{name} імя не знайдено в словнику"
 
-    # elif not number.isdigit():
-    #     return f"{number} не номер телефону будь ласка введіть числа"
     record = PHONE_BOOK[name]
     record.add_phone(number)
     return f"Номер ({number}) додано до контакту {name}"

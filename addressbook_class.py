@@ -1,4 +1,5 @@
 from collections import UserDict
+from datetime import datetime
 import re
 
 
@@ -187,4 +188,35 @@ class Birthday(Field):
 
     Додається до списку birthday, який створюється при ініціалізації класу Record.
     """
-    pass
+
+    def __init__(self, value):
+        super().__init__(value)
+
+    @property
+    def value(self):
+        """
+        Гетер для повернення значення value.
+        :return:
+        """
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        """
+        Сетер для зміни значення ДН.
+
+        Перевизначений для батьківського класу Field
+        :param new_value:
+        :return:
+        """
+        while True:
+            if new_value in "--.--.----":
+                self.__value = new_value
+                break
+            elif re.fullmatch(r"\d{2}\.\d{2}\.\d{4}", new_value):
+                days, months, years = new_value.split(".")
+                if int(days) > 31 or int(months) > 12:
+                    break
+                self.__value = new_value
+                break
+            raise ValueError("не дата в форматі (00.00.0000/д.м.р).")
