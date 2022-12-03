@@ -121,7 +121,8 @@ class Field:
     Батьківський клас для Name, Phone.
     """
     def __init__(self, value):
-        self.__value = value
+        self.__value = None
+        self.value = value
 
     @property
     def value(self):
@@ -155,33 +156,8 @@ class Phone(Field):
     Додається до списку phones, який створюється при ініціалізації класу Record.
     """
 
-    # @property
-    # def value(self):
-    #     """
-    #     Гетер для повернення значення value.
-    #     :return:
-    #     """
-    #     return self.__value
-
-    @super().value.setter
-    def value(self, new_value):
-        """
-        Сетер для зміни значення номеру телефона.
-
-        Перевизначений для батьківського класу Field
-        :param new_value:
-        :return:
-        """
-        if re.fullmatch(r"", new_value)
-            self.__value = new_value
-
-
-class Birthday(Field):
-    """
-    День народження контакта.
-
-    Додається до списку birthday, який створюється при ініціалізації класу Record.
-    """
+    def __init__(self, value):
+        super().__init__(value)
 
     @property
     def value(self):
@@ -194,8 +170,21 @@ class Birthday(Field):
     @value.setter
     def value(self, new_value):
         """
-        Сетер для зміни значення value.
+        Сетер для зміни значення номеру телефона.
+
+        Перевизначений для батьківського класу Field
         :param new_value:
         :return:
         """
+        if not re.fullmatch(r"\+\d{12}", new_value):
+            raise ValueError("Невірний номер телефону, введіть телефон в форматі: (+380981112233)")
         self.__value = new_value
+
+
+class Birthday(Field):
+    """
+    День народження контакта.
+
+    Додається до списку birthday, який створюється при ініціалізації класу Record.
+    """
+    pass

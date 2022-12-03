@@ -77,9 +77,9 @@ def create_data(data):
 
     if name.isnumeric():
         raise ValueError('Wrong name.')
-    for phon in phones:
-        if not phon.isnumeric():
-            raise ValueError('Wrong phones.')
+    # for phon in phones:
+    #     if (not phon.isnumeric()) or (phon in "+"):
+    #         raise ValueError('Wrong phones.')
     return name.title(), phones
 
 
@@ -93,8 +93,8 @@ def change(data):
     if name not in PHONE_BOOK:
         return f"{name} імя не знайдено в словнику"
 
-    elif not number.isdigit():
-        return f"{number} не номер телефону будь ласка введіть числа"
+    # elif not number.isdigit():
+    #     return f"{number} не номер телефону будь ласка введіть числа"
     records = PHONE_BOOK[name]
     records.change_phone_record(number)
     return f"Запис ({name} : {number}) замінено в словнику"
@@ -144,8 +144,8 @@ def user_add_phone(data):
     if name not in PHONE_BOOK:
         return f"{name} імя не знайдено в словнику"
 
-    elif not number.isdigit():
-        return f"{number} не номер телефону будь ласка введіть числа"
+    # elif not number.isdigit():
+    #     return f"{number} не номер телефону будь ласка введіть числа"
     record = PHONE_BOOK[name]
     record.add_phone(number)
     return f"Номер ({number}) додано до контакту {name}"
