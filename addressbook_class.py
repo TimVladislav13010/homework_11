@@ -1,4 +1,5 @@
 from collections import UserDict
+import re
 
 
 """
@@ -23,6 +24,10 @@ class Record:
     def __init__(self, name: str):
         self.name = Name(name)
         self.phones = []
+        self.birthday = Birthday("--.--.----")
+
+    def add_birthday(self, birthday):
+        self.birthday = (Birthday(birthday))
 
     def add_phone(self, phones):
         self.phones.append(Phone(phones))
@@ -32,7 +37,10 @@ class Record:
         phone_numbers = ""
         for phone in self.phones:
             phone_numbers += f"{phone.value}, "
-        return f"{self.name.value}: {phone_numbers[:-2]}"
+        return f"{self.name.value}: {phone_numbers[:-2]}. ДН: {self.birthday.value}"
+
+    def change_birthday_record(self, new_birthday):
+        self.birthday = Birthday(new_birthday)
 
     def change_phone_record(self, new_phone):
         """
@@ -59,6 +67,9 @@ class Record:
             inp_user = int(input(f"Введіть №..."))
             self.phones[inp_user] = Phone(new_phone)
 
+    def delete_birthday(self):
+        self.birthday = "--.--.----"
+
     def delete_phone_record(self, name):
         """
         Метод для видалення номеру в існуючого контакту.
@@ -73,7 +84,7 @@ class Record:
             return f"У контакта немає номерів..."
 
         elif len(self.phones) == 1:
-            number = self.phones[0].return_value()
+            number = self.phones[0].value
             self.phones.pop(0)
             return f"{number}"
 
@@ -143,4 +154,48 @@ class Phone(Field):
 
     Додається до списку phones, який створюється при ініціалізації класу Record.
     """
-    pass
+
+    # @property
+    # def value(self):
+    #     """
+    #     Гетер для повернення значення value.
+    #     :return:
+    #     """
+    #     return self.__value
+
+    @super().value.setter
+    def value(self, new_value):
+        """
+        Сетер для зміни значення номеру телефона.
+
+        Перевизначений для батьківського класу Field
+        :param new_value:
+        :return:
+        """
+        if re.fullmatch(r"", new_value)
+            self.__value = new_value
+
+
+class Birthday(Field):
+    """
+    День народження контакта.
+
+    Додається до списку birthday, який створюється при ініціалізації класу Record.
+    """
+
+    @property
+    def value(self):
+        """
+        Гетер для повернення значення value.
+        :return:
+        """
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        """
+        Сетер для зміни значення value.
+        :param new_value:
+        :return:
+        """
+        self.__value = new_value

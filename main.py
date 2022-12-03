@@ -1,3 +1,5 @@
+import re
+
 from addressbook_class import AddressBook, Record
 
 
@@ -84,7 +86,7 @@ def create_data(data):
 @input_error
 def change(data):
     """
-    Функціця для змінни існуючого номеру в телефонній книзі
+    Функція для зміни існуючого номеру в телефонній книзі
     """
     name, number = data.strip().split(' ')
     name = name.title()
@@ -114,9 +116,28 @@ def delete_user(name):
 
 
 @input_error
+def user_add_birthday(data):
+    """
+    Функція для додавання дня народження до існуючого контакту.
+    """
+    name, birthday = data.strip().split(' ')
+    name = name.title()
+
+    if name not in PHONE_BOOK:
+        return f"{name} імя не знайдено в словнику"
+
+    elif not re.fullmatch(r"\d{2}\.\d{2}\.\d{4}", birthday):
+        return f"{birthday} не дата в форматі (00.00.0000/д.м.р)."
+
+    record = PHONE_BOOK[name]
+    record.change_birthday_record(birthday)
+    return f"Дата народження ({birthday}) додано до контакту {name}"
+
+
+@input_error
 def user_add_phone(data):
     """
-    Функціця для додавання номеру до існуючого контакту.
+    Функція для додавання номеру до існуючого контакту.
     """
     name, number = data.strip().split(' ')
     name = name.title()
@@ -132,7 +153,7 @@ def user_add_phone(data):
 
 def user_delete_phone(name):
     """
-    Функціця для видалення номеру в існуючого контакту.
+    Функція для видалення номеру в існуючого контакту.
     """
     name = name.title()
     if name not in PHONE_BOOK:
@@ -143,6 +164,21 @@ def user_delete_phone(name):
     if result in returns:
         return returns
     return f"Номер телефону: {result}, видалено в контакта {name}"
+
+
+def user_delete_birthday(name):
+    """
+    Функція для видалення дня народження у контакту.
+    """
+    name = name.strip()
+    name = name.title()
+
+    if name not in PHONE_BOOK:
+        return f"{name} імя не знайдено в словнику"
+
+    record = PHONE_BOOK[name]
+    record.delete_birthday()
+    return f"Дата народження видалено у контакту {name}"
 
 
 def phone(name):
@@ -188,10 +224,12 @@ def helps():
            "hello \n"\
            "add - (add name phone)\n"\
            "delete_user - (delete_user name)\n"\
-           "change - (change name phone)\n"\
+           "change - (change name phone(+380995551122))\n"\
            "phone - (phone name)\n"\
-           "user_add_phone - (user_add_phone name phone)\n"\
-           "user_delete_phone - (user_delete_phone name)\n"\
+           "user_add_phone - (user_add_phone name phone(+380995551122))\n"\
+           "user_delete_phone - (user_delete_phone name)\n" \
+           "user_add_birthday - (user_add_birthday 00.00.0000/д.м.р)\n" \
+           "user_delete_birthday - (user_delete_birthday name)\n" \
            "show_all\n"\
            "good_bye, close, exit, .\n"
 
@@ -202,6 +240,8 @@ USER_COMMANDS = {
     "change": change,
     "user_add_phone": user_add_phone,
     "user_delete_phone": user_delete_phone,
+    "user_add_birthday": user_add_birthday,
+    "user_delete_birthday": user_delete_birthday,
     "delete_user": delete_user,
     "phone": phone,
     "show_all": show_all,
@@ -218,7 +258,7 @@ def main():
     Логіка роботи бота помічника
     """
     while True:
-        user_input = input("Введіть будь ласка команду: (або скористайтеся командою help)\n")
+        user_input = input("Введіть будь ласка команду: (або використай команду help)\n")
         result = change_input(user_input)
         print(result)
         if result == "Good Bye!":
