@@ -216,7 +216,7 @@ class Birthday(Field):
             elif re.fullmatch(r"\d{2}\.\d{2}\.\d{4}", new_value):
                 days, months, years = new_value.split(".")
                 if int(days) > 31 or int(months) > 12:
-                    break
+                    raise ValueError("невірний день або місяць.")
                 self.__value = new_value
                 break
             raise ValueError("не дата в форматі (00.00.0000/д.м.р).")
