@@ -69,7 +69,7 @@ class Record:
             self.phones[inp_user] = Phone(new_phone)
 
     def delete_birthday(self):
-        self.birthday = "--.--.----"
+        self.birthday = Birthday("--.--.----")
 
     def delete_phone_record(self, name):
         """
