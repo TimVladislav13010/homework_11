@@ -69,6 +69,11 @@ class Record:
             inp_user = int(input(f"Введіть №..."))
             self.phones[inp_user] = Phone(new_phone)
 
+    def days_to_birthday(self):
+        days, months, years = self.get_birthday().split(".")
+        day_birthday = datetime(day=days, month=months, year=years)
+        today = date.today()
+
     def delete_birthday(self):
         self.birthday = Birthday("--.--.----")
 
@@ -101,15 +106,8 @@ class Record:
             self.phones.pop(inp_user)
             return f"{number}"
 
-    @classmethod
-    def get_birthday(cls):
-        return cls.birthday.value
-
-    @classmethod
-    def days_to_birthday(cls):
-        days, months, years = cls.get_birthday().split(".")
-        day_birthday = datetime(day=days, month=months, year=years)
-        today = date.today()
+    def get_birthday(self):
+        return self.birthday.value
 
 
 class AddressBook(UserDict):
