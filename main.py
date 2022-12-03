@@ -97,6 +97,10 @@ def change(data):
     return f"Запис ({name} : {number}) замінено в словнику"
 
 
+def days_to_birthday():
+    Record.days_to_birthday()
+
+
 def delete_user(name):
     """
     Функція видалення контакту.
@@ -223,6 +227,7 @@ def helps():
            "user_delete_phone - (user_delete_phone name)\n" \
            "user_add_birthday - (user_add_birthday 00.00.0000/д.м.р)\n" \
            "user_delete_birthday - (user_delete_birthday name)\n" \
+           "days_to_birthday - (days_to_birthday name)\n" \
            "show_all\n"\
            "good_bye, close, exit, .\n"
 
@@ -235,6 +240,7 @@ USER_COMMANDS = {
     "user_delete_phone": user_delete_phone,
     "user_add_birthday": user_add_birthday,
     "user_delete_birthday": user_delete_birthday,
+    "days_to_birthday": days_to_birthday,
     "delete_user": delete_user,
     "phone": phone,
     "show_all": show_all,

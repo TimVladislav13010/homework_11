@@ -1,5 +1,5 @@
 from collections import UserDict
-from datetime import datetime
+from datetime import date, datetime
 import re
 
 
@@ -11,6 +11,7 @@ AddressBook(UserDict)
 Field
 Name(Field)
 Phone(Field)
+Birthday(Field)
 """
 
 
@@ -99,6 +100,16 @@ class Record:
             number = self.phones[inp_user].value
             self.phones.pop(inp_user)
             return f"{number}"
+
+    @classmethod
+    def get_birthday(cls):
+        return cls.birthday.value
+
+    @classmethod
+    def days_to_birthday(cls):
+        days, months, years = cls.get_birthday().split(".")
+        day_birthday = datetime(day=days, month=months, year=years)
+        today = date.today()
 
 
 class AddressBook(UserDict):
