@@ -69,10 +69,22 @@ class Record:
             inp_user = int(input(f"Введіть №..."))
             self.phones[inp_user] = Phone(new_phone)
 
-    def days_to_birthday(self):
-        days, months, years = self.get_birthday().split(".")
-        day_birthday = datetime(day=days, month=months, year=years)
-        today = date.today()
+    @staticmethod
+    def days_to_birthday(sorted_dict, str_today_data):
+        i = False
+
+        for k, v in sorted_dict.items():
+            if k in "today":
+                i = True
+                continue
+            if i:
+                names = k
+                dates = v
+                today_date = datetime.strptime(str_today_data, "%d.%m")
+                name_birthday = names
+                day_birthday = datetime.strptime(dates, "%d.%m")
+                result = day_birthday - today_date
+                return name_birthday, result.days
 
     def delete_birthday(self):
         self.birthday = Birthday("--.--.----")

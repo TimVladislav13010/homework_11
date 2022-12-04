@@ -1,4 +1,4 @@
-import re
+from datetime import date, datetime
 
 from addressbook_class import AddressBook, Record
 
@@ -98,7 +98,23 @@ def change(data):
 
 
 def days_to_birthday():
-    Record.days_to_birthday()
+    list_birthday = []
+    dict_birthday = dict()
+    for name, birthday in PHONE_BOOK.items():
+        dict_birthday["name"] = name
+        dict_birthday[name] = birthday.birthday.value[:5]
+
+    today_data = datetime.today()
+    str_today_data = today_data.strftime("%d.%m")
+    dict_birthday["today"] = str_today_data
+
+    dict_birthday = sorted(dict_birthday, key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d %H:%M:%S'))
+    dates = {(name, datetime.strptime(ts, "%d.%m")) for name, ts in dict_birthday.items()}
+    dates.sort()
+    sorted_dict_birthday = [datetime.strftime(ts, "%d.%m") for ts in dates]
+
+    name_birthday, result_days = Record.days_to_birthday(sorted_dict_birthday, str_today_data)
+    return f"Наступний ДН: {name_birthday} - через {result_days} днів."
 
 
 def delete_user(name):
@@ -227,7 +243,7 @@ def helps():
            "user_delete_phone - (user_delete_phone name)\n" \
            "user_add_birthday - (user_add_birthday 00.00.0000/д.м.р)\n" \
            "user_delete_birthday - (user_delete_birthday name)\n" \
-           "days_to_birthday - (days_to_birthday name)\n" \
+           "days_to_birthday\n"\
            "show_all\n"\
            "good_bye, close, exit, .\n"
 
