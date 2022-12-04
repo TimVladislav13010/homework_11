@@ -70,21 +70,42 @@ class Record:
             self.phones[inp_user] = Phone(new_phone)
 
     @staticmethod
-    def days_to_birthday(sorted_dict, str_today_data):
-        i = False
+    def days_to_birthday(sorted_list, str_today_data):
+        check = False
 
-        for k, v in sorted_dict.items():
-            if k in "today":
-                i = True
-                continue
-            if i:
-                names = k
-                dates = v
-                today_date = datetime.strptime(str_today_data, "%d.%m")
-                name_birthday = names
-                day_birthday = datetime.strptime(dates, "%d.%m")
-                result = day_birthday - today_date
-                return name_birthday, result.days
+        for k, v in sorted_list[-1].items():
+            if v in "today":
+                sorted_list.insert(0, sorted_list.pop(-1))
+                check = True
+
+        i = False
+        n = False
+        names = None
+        day_birthday = None
+
+        for dicts in sorted_list:
+            for k, v in dicts.items():
+                if v in "today":
+                    i = True
+                    break
+                if i:
+                    names = v
+                    i = False
+                    n = True
+                    continue
+                if n:
+                    dates = v
+                    today_year = datetime.today()
+                    new_years = today_year.strftime("%Y")
+                    today_date = datetime.strptime(str_today_data + "." + new_years, "%d.%m.%Y")
+
+                    if check:
+                        day_birthday = datetime.strptime(dates + "." + (str(int(new_years) + 1)), "%d.%m.%Y")
+                    elif not check:
+                        day_birthday = datetime.strptime(dates + "." + new_years, "%d.%m.%Y")
+
+                    result = day_birthday - today_date
+                    return names, result.days
 
     def delete_birthday(self):
         self.birthday = Birthday("--.--.----")

@@ -98,22 +98,23 @@ def change(data):
 
 
 def days_to_birthday():
-    list_birthday = []
+
+    list_birthday = list()
     dict_birthday = dict()
-    for name, birthday in PHONE_BOOK.items():
-        dict_birthday["name"] = name
-        dict_birthday[name] = birthday.birthday.value[:5]
-
     today_data = datetime.today()
-    str_today_data = today_data.strftime("%d.%m")
-    dict_birthday["today"] = str_today_data
+    str_today_data = datetime.strftime(today_data, "%d.%m")
+    dict_birthday["name"] = "today"
+    dict_birthday["birthday"] = str_today_data
+    list_birthday.append(dict_birthday)
 
-    dict_birthday = sorted(dict_birthday, key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d %H:%M:%S'))
-    dates = {(name, datetime.strptime(ts, "%d.%m")) for name, ts in dict_birthday.items()}
-    dates.sort()
-    sorted_dict_birthday = [datetime.strftime(ts, "%d.%m") for ts in dates]
+    for name, birthday in PHONE_BOOK.items():
+        dict_birthday = dict()
+        dict_birthday["name"] = name
+        dict_birthday["birthday"] = birthday.birthday.value[:5]
+        list_birthday.append(dict_birthday)
 
-    name_birthday, result_days = Record.days_to_birthday(sorted_dict_birthday, str_today_data)
+    sorted_list_birthday = sorted(list_birthday, key=lambda x: datetime.strptime(x['birthday'], '%d.%m'))
+    name_birthday, result_days = Record.days_to_birthday(sorted_list_birthday, str_today_data)
     return f"Наступний ДН: {name_birthday} - через {result_days} днів."
 
 
