@@ -1,5 +1,5 @@
 from collections import UserDict
-from datetime import date, datetime
+from datetime import datetime
 import re
 
 
@@ -26,7 +26,7 @@ class Record:
     def __init__(self, name: str):
         self.name = Name(name)
         self.phones = []
-        self.birthday = Birthday("--.--.----")
+        self.birthday = Birthday("-")
 
     def add_birthday(self, birthday):
         self.birthday = (Birthday(birthday))
@@ -70,52 +70,22 @@ class Record:
             inp_user = int(input(f"Введіть №..."))
             self.phones[inp_user] = Phone(new_phone)
 
-    @staticmethod
-    def days_to_birthday(sorted_list, str_today_data):
+    def days_to_birthday(self):
         """
-        Метод який рахує кількість днів до наступного дня народження.
-        :param sorted_list:
-        :param str_today_data:
+        Метод для визначення скільки днів залишилось до ДН контакта.
         :return:
         """
-        check = False
-
-        for k, v in sorted_list[-1].items():
-            if v in "today":
-                sorted_list.insert(0, sorted_list.pop(-1))
-                check = True
-
-        i = False
-        n = False
-        names = None
-        day_birthday = None
-
-        for dicts in sorted_list:
-            for k, v in dicts.items():
-                if v in "today":
-                    i = True
-                    break
-                if i:
-                    names = v
-                    i = False
-                    n = True
-                    continue
-                if n:
-                    dates = v
-                    today_year = datetime.today()
-                    new_years = today_year.strftime("%Y")
-                    today_date = datetime.strptime(str_today_data + "." + new_years, "%d.%m.%Y")
-
-                    if check:
-                        day_birthday = datetime.strptime(dates + "." + (str(int(new_years) + 1)), "%d.%m.%Y")
-                    elif not check:
-                        day_birthday = datetime.strptime(dates + "." + new_years, "%d.%m.%Y")
-
-                    result = day_birthday - today_date
-                    return names, result.days
+        if self.birthday.value in "-":
+            return f"У контакта не задана дата народження."
+        day_today = datetime.today()
+        day_birthday = datetime.strptime(str(self.birthday.value[:5]) + "." + str(day_today.year), "%d.%m.%Y")
+        if day_today > day_birthday:
+            day_birthday = datetime.strptime(self.birthday.value[:5] + "." + str(int(day_today.year + 1)), "%d.%m.%Y")
+        days_to_birth = day_birthday - day_today
+        return days_to_birth.days
 
     def delete_birthday(self):
-        self.birthday = Birthday("--.--.----")
+        self.birthday = Birthday("-")
 
     def delete_phone_record(self, name):
         """

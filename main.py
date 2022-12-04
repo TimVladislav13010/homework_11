@@ -1,5 +1,3 @@
-from datetime import date, datetime
-
 from addressbook_class import AddressBook, Record
 
 
@@ -97,28 +95,23 @@ def change(data):
     return f"Запис ({name} : {number}) замінено в словнику"
 
 
-def days_to_birthday():
+def days_to_birthday(name):
     """
-    Функція яка повертає кількість днів до наступного дня народження.
+    Функція яка повертає кількість днів до наступного дня народження контакту.
     :return:
     """
-    list_birthday = list()
-    dict_birthday = dict()
-    today_data = datetime.today()
-    str_today_data = datetime.strftime(today_data, "%d.%m")
-    dict_birthday["name"] = "today"
-    dict_birthday["birthday"] = str_today_data
-    list_birthday.append(dict_birthday)
+    name = name.title()
 
-    for name, birthday in PHONE_BOOK.items():
-        dict_birthday = dict()
-        dict_birthday["name"] = name
-        dict_birthday["birthday"] = birthday.birthday.value[:5]
-        list_birthday.append(dict_birthday)
+    if name not in PHONE_BOOK:
+        return f"{name} імя не знайдено в словнику"
 
-    sorted_list_birthday = sorted(list_birthday, key=lambda x: datetime.strptime(x['birthday'], '%d.%m'))
-    name_birthday, result_days = Record.days_to_birthday(sorted_list_birthday, str_today_data)
-    return f"Наступний ДН: {name_birthday} - через {result_days} днів."
+    record = PHONE_BOOK[name]
+    result = record.days_to_birthday()
+
+    if str(result) in "У контакта не задана дата народження.":
+        return f"У контакта {name} не задана дата народження."
+
+    return f"До дня народження {name} залишилось {result} днів."
 
 
 def delete_user(name):
@@ -255,7 +248,7 @@ def helps():
            "user_delete_phone - (user_delete_phone name)\n" \
            "user_add_birthday - (user_add_birthday 00.00.0000/д.м.р)\n" \
            "user_delete_birthday - (user_delete_birthday name)\n" \
-           "days_to_birthday\n"\
+           "days_to_birthday - (days_to_birthday name)\n"\
            "show_all\n"\
            "good_bye, close, exit, .\n"
 
