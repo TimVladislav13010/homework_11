@@ -98,7 +98,10 @@ def change(data):
 
 
 def days_to_birthday():
-
+    """
+    Функція яка повертає кількість днів до наступного дня народження.
+    :return:
+    """
     list_birthday = list()
     dict_birthday = dict()
     today_data = datetime.today()
@@ -211,8 +214,16 @@ def show_all():
     Функція для відображення всієї телефонної книги
     """
     show_number = ""
-    for key, val in PHONE_BOOK.get_records().items():
-        show_number += f"{val.return_record()}\n"
+    list_info = 1
+
+    for lists in PHONE_BOOK.iterator():
+        show_number += f"Сторінка {list_info}\n"
+
+        for record in lists:
+            show_number += f"{record.return_record()}\n"
+
+        list_info += 1
+
     return show_number
 
 

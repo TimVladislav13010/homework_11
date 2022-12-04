@@ -37,6 +37,7 @@ class Record:
     def return_record(self):
 
         phone_numbers = ""
+
         for phone in self.phones:
             phone_numbers += f"{phone.value}, "
         return f"{self.name.value}: {phone_numbers[:-2]}. ДН: {self.birthday.value}"
@@ -71,6 +72,12 @@ class Record:
 
     @staticmethod
     def days_to_birthday(sorted_list, str_today_data):
+        """
+        Метод який рахує кількість днів до наступного дня народження.
+        :param sorted_list:
+        :param str_today_data:
+        :return:
+        """
         check = False
 
         for k, v in sorted_list[-1].items():
@@ -149,6 +156,7 @@ class AddressBook(UserDict):
 
     Батьківський клас UserDict.
     """
+
     def add_record(self, record):
         self.data[record.name.value] = record
 
@@ -157,6 +165,27 @@ class AddressBook(UserDict):
 
     def get_name_record(self, name) -> Record:
         return self.data.get(name)
+
+    def iterator(self, n_count=10):
+        """
+        Метод iterator, який повертає генератор за записами AddressBook і за одну ітерацію повертає
+        уявлення для N записів.
+        :param n_count:
+        :return:
+        """
+        i = 0
+        info_list = list()
+
+        for record in self.data.values():
+            info_list.append(record)
+            i += 1
+            if i == n_count:
+                yield info_list
+                i = 0
+                info_list = list()
+
+        if info_list:
+            yield info_list
 
 
 class Field:
